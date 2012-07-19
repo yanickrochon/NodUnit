@@ -21,7 +21,7 @@ test suite file should return an object containing the test functions :
 * **afterTest()** *(optional)* : called after every test case
 * **testXXXXX()** : any method starting with `test*` will be considered a unit test case
 
-Typically, the file `./test/fooTest.js` should test the file `./foo.js`
+Typically, the file `./test/fooTest.js` should test the file `./app/foo.js`
 
 There should only be declarative statements outside test functions. Therefore,
 the `setup` function should be responsible of executing `require` of the actual

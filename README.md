@@ -55,3 +55,13 @@ Usage
 3. Run tests (ie. `node nodunit.js`)
 
 
+Configuration
+-------------
+The following configurations are available
+
+* **ASYNC_TIMEOUT** *(int)* : The timeout (in milliseconds) before waiting for asynchronous tests to complete. Any test beyond this timeout will be considered as failed. (default `30000`)
+* **LOG_FILE** *(string)* : The log file to use. Set null to prevent result logging. Logs are saved in JSON format. (default `test.log.js`)
+* **LOG_OUTPUT** *(boolean)* : Tell whether to echo output to stdout or not (default `true`)
+* **TEST_DIR** *(string)* : The path where tested should be loaded (default `./test`)
+
+

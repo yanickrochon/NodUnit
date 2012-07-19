@@ -47,10 +47,10 @@ Usage
 2. Create a test suite file (ie: `cd test && touch fooTest.js`)
 2. Add a test case function to the test suite (for example) :
 
-    this.testBar = function testBar() {
-       var hello = "Hello world";
-       assert.equal(hello, "Hello world", "some message");
-    }
+        this.testBar = function testBar() {
+           var hello = "Hello world";
+           assert.equal(hello, "Hello world", "some message");
+        }
 
 3. Run tests (ie. `node nodunit.js`)
 

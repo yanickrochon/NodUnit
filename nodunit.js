@@ -243,7 +243,7 @@ function runTestSuite(module) {
                     execTime: 0
                 };
                 result.tests.push(testResult);
-                runTestCase(tObj, prop, testResult);
+                runTestCase(result.module, tObj, prop, testResult);
             }
         }
         
@@ -273,11 +273,12 @@ function runTestSuite(module) {
  * given test case is detected to be asyinchronous, thus the function
  * does not return anything.
  *
+ * @param module string       the module name
  * @param tObj object         the test module object
  * @param tc string           the test case function name
  * @param result object       the result object
  */
-function runTestCase(tObj, tc, result) {
+function runTestCase(module, tObj, tc, result) {
     var err = false;
     var status = 'OK';
     var async = !!tObj[tc].length;  // async if the function has at least 1 argument
@@ -305,16 +306,15 @@ function runTestCase(tObj, tc, result) {
         if (async) {
             logln("Testing '%s' (async start)...", tc.substr(4));
             tObj[tc](function(err) {
-                var index = findRunningIndex(result.running, tc);
-                if (index > -1) {  // if index == -1, then the test had timed out...
+                if (result.status == TEST_STATUS_PENDING) {  // if index == -1, then the test had timed out...
                     if (err) {
                         result.status = TEST_STATUS_FAILED;
-                        result.error = err;
+                        result.error = convertErrorToObject(err);
                         status = 'Failed';
                     } else {
                         result.status = TEST_STATUS_SUCCESS;
                     }
-                    log("    ... '%s.%s' (async end)...", result.module, tc.substr(4));
+                    log("    ... '%s.%s' (async end)...", module, tc.substr(4));
                     _done();
                 }
             });
@@ -362,6 +362,26 @@ function formatTestCaseExceptionMessage(e) {
     } else {
         return "Exception : " + e;
     }
+}
+
+/**
+ * Utility function to convert Error objects to a conventional object
+ * so it can be logged
+ */
+function convertErrorToObject(err) {
+    if (err.stack) {
+        var obj = {
+            message: err.message,
+            type: err.type ? err.type : 'Error',
+            stack: err.stack.split(/\n\s+at\s+/).slice(1),
+            arguments: err.arguments
+        };
+        for (var prop in err) {
+            obj[prop] = err[prop];
+        }
+        err = obj;
+    }
+    return err;
 }
 
 /**
